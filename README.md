@@ -21,7 +21,7 @@ TempleBuilder is a Paper 1.21.10 plugin that procedurally constructs an enormous
 
 ## Development
 
-TempleBuilder ships with a Gradle build that targets Java 21. Lightweight Bukkit API stubs are included so the project can compile and run its geometry tests in isolation; when wiring the plugin into a real Paper server, swap the stubs for the official Paper API dependency (for example `io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT`). Unit tests exercise the deterministic geometry routines for mirroring, tier progression, statue proportions, and eye placement.
+TempleBuilder ships with a Gradle build that targets Java 21. Lightweight Bukkit API stubs are included so the project can compile and run its geometry tests in isolation; the Gradle jar task now strips those stubs so the runtime artifact defers to the server-provided Bukkit/Paper classes and avoids class loader conflicts. When wiring the plugin into a real Paper server, you can also add a `compileOnly` dependency on the official Paper API (for example `io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT`). Unit tests exercise the deterministic geometry routines for mirroring, tier progression, statue proportions, and eye placement.
 
 ### Build & Test
 

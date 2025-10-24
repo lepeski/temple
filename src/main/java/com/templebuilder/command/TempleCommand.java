@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 public class TempleCommand implements CommandExecutor, TabCompleter {
 
@@ -88,8 +89,13 @@ public class TempleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         BlockPos origin = new BlockPos(x, y, z);
-        BuildPlan plan = TempleBuilder.build(world, origin, scale, palette, TempleStyle.GRAND);
-        buildManager.queueBuild(sender, plan);
+        try {
+            BuildPlan plan = TempleBuilder.build(world, origin, scale, palette, TempleStyle.GRAND);
+            buildManager.queueBuild(sender, plan);
+        } catch (Exception ex) {
+            sender.sendMessage("§cFailed to generate the temple. Check console for details.");
+            plugin.getLogger().log(Level.SEVERE, "TempleBuilder encountered an error while assembling a build plan", ex);
+        }
         return true;
     }
 

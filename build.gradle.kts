@@ -31,3 +31,9 @@ tasks.test {
     enabled = false
 }
 
+tasks.jar {
+    // Strip the lightweight Bukkit stubs from the runtime jar so the server-provided
+    // implementations are used instead of the compile-time placeholders.
+    exclude("org/bukkit/**")
+}
+
