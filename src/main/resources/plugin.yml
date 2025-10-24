@@ -1,0 +1,13 @@
+name: TempleBuilder
+main: com.templebuilder.TempleBuilderPlugin
+version: 1.0.0
+api-version: "1.21"
+commands:
+  temple:
+    description: Builds a cinematic pyramid temple
+    usage: /temple build <x> <y> <z> [scale] [palette]
+    permission: templebuilder.use
+permissions:
+  templebuilder.use:
+    description: Allows use of the TempleBuilder commands
+    default: true
