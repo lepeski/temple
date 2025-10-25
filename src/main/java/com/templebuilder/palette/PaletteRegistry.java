@@ -2,13 +2,15 @@ package com.templebuilder.palette;
 
 import org.bukkit.Material;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public final class PaletteRegistry {
 
-    private static final Map<String, Palette> REGISTRY = new HashMap<>();
+    private static final Map<String, Palette> REGISTRY = new LinkedHashMap<>();
 
     static {
         register("default", new Palette(
@@ -45,5 +47,9 @@ public final class PaletteRegistry {
 
     public static void register(String key, Palette palette) {
         REGISTRY.put(key.toLowerCase(Locale.ROOT), palette);
+    }
+
+    public static Collection<String> keys() {
+        return Collections.unmodifiableCollection(REGISTRY.keySet());
     }
 }

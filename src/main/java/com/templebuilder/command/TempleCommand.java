@@ -16,19 +16,20 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 public class TempleCommand implements CommandExecutor, TabCompleter {
 
     private final TempleBuilderPlugin plugin;
     private final BuildManager buildManager;
+    private static final List<String> SUBCOMMANDS = List.of("build", "undo", "schem");
 
     public TempleCommand(TempleBuilderPlugin plugin, BuildManager buildManager) {
         this.plugin = plugin;
@@ -130,12 +131,27 @@ public class TempleCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) {
-            return StringUtil.copyPartialMatches(args[0], Arrays.asList("build", "undo", "schem"), new ArrayList<>());
-        }
-        if (args.length == 5 && args[0].equalsIgnoreCase("build")) {
-            return StringUtil.copyPartialMatches(args[4], Arrays.asList("default", "alt"), new ArrayList<>());
+        try {
+            if (args.length == 1) {
+                return partialMatches(args[0], SUBCOMMANDS);
+            }
+            if (args.length == 5 && args[0].equalsIgnoreCase("build")) {
+                return partialMatches(args[4], PaletteRegistry.keys());
+            }
+        } catch (Exception ex) {
+            plugin.getLogger().log(Level.WARNING, "Tab completion failed for /" + alias, ex);
         }
         return Collections.emptyList();
+    }
+
+    private List<String> partialMatches(String token, Iterable<String> options) {
+        String lower = token == null ? "" : token.toLowerCase(Locale.ROOT);
+        List<String> matches = new ArrayList<>();
+        for (String option : options) {
+            if (option.toLowerCase(Locale.ROOT).startsWith(lower)) {
+                matches.add(option);
+            }
+        }
+        return matches;
     }
 }
